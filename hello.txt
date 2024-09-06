@@ -1,0 +1,2 @@
+1. Tentang OOP
+2. Tahu Cara pakai BeautifulSoup4 untuk mengekstrak data 
