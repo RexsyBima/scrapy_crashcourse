@@ -63,7 +63,20 @@ ROBOTSTXT_OBEY = False
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     "bookstoscrape.pipelines.BookstoscrapePipeline": 300,
+    "bookstoscrape.pipelines.SqlAlchemyPipeline": 400,
 }
+
+#
+FEED_EXPORT_FIELDS = [
+    "title",
+    "price",
+    "stock",
+    "rating",
+    "description",
+    "upc",
+    "type_",
+    "total_reviews",
+]
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

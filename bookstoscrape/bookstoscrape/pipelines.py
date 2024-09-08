@@ -6,6 +6,7 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+from .items import session, BookSqlAlchemyItem
 
 
 class BookstoscrapePipeline:
@@ -34,3 +35,23 @@ class BookstoscrapePipeline:
                 return 5
             case _:
                 return 0
+
+
+class SqlAlchemyPipeline:
+    def open_spider(self, spider):
+        self.session = session
+
+    def close_spider(self, spider):
+        self.session.close()
+
+    def process_item(self, item, spider):
+        book = BookSqlAlchemyItem(**item)
+        book_exist = (
+            self.session.query(BookSqlAlchemyItem).filter_by(title=book.title).first()
+        )
+        if book_exist:
+            print(f"Book {book.title} already exists")
+        else:
+            self.session.add(book)
+            self.session.commit()
+            print(f"Book {book.title} added")

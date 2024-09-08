@@ -10,19 +10,16 @@ class MainSpider(CrawlSpider):
     allowed_domains = ["books.toscrape.com"]
     start_urls = ["https://books.toscrape.com/"]
     rules = [
-        # Rule to extract item pages
         Rule(
             LinkExtractor(
-                allow=(r"/catalogue/.*_\d+/index\.html"), deny=(r"/category/")
+                allow=r"page-"  # This will extract the 'next' pagination links
             ),
-            callback="parse_item",
             follow=True,
         ),
-        # Rule to follow pagination links
+        # Rule to extract item pages
         Rule(
-            LinkExtractor(
-                restrict_css="li.next a"  # This will extract the 'next' pagination links
-            ),
+            LinkExtractor(allow=(r"/catalogue/"), deny=(r"/category/")),  # reg ex
+            callback="parse_item",
             follow=True,
         ),
     ]
@@ -59,6 +56,12 @@ class MainSpider(CrawlSpider):
         yield book
 
 
-"""        next_page = response.css("li.next a::attr(href)").get()
-        if next_page is not None:
-            yield response.follow(next_page, self.parse_item)"""
+""" 
+        # Rule to follow pagination links
+        Rule(
+            LinkExtractor(
+                allow=r"page-"  # This will extract the 'next' pagination links
+            ),
+            follow=True,
+        ),
+"""
